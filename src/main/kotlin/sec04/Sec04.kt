@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import printWithThread
 
-fun main(): Unit = runBlocking {
+fun example2(): Unit = runBlocking {
     val job = launch(Dispatchers.Default) {
         var i = 1
         var nextPrintTime = System.currentTimeMillis()
@@ -43,3 +43,15 @@ fun example(): Unit = runBlocking {
     job1.cancel()
 }
 
+fun main() = runBlocking {
+    val job = launch {
+        try {
+        } catch (e: CancellationException) {
+        }
+        printWithThread("try-catch에 의해 취소되지 않았다.(원래는 해당 라인이 실행되면 X)")
+    }
+
+    delay(100)
+    printWithThread("취소 시작")
+    job.cancel()
+}

@@ -1,10 +1,6 @@
 package sec03
 
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import printWithThread
 import kotlin.system.measureTimeMillis
 
@@ -15,6 +11,7 @@ fun example1() {
             delay(2_000L) // yield()와 비슷
             printWithThread("LAUNCH END")
         }
+        printWithThread("RUNBLOCKING END")
     }
 
     printWithThread("END")
@@ -62,22 +59,22 @@ fun example5(): Unit = runBlocking {
 }
 
 fun main(): Unit = runBlocking {
-    val time = measureTimeMillis {
-        val job1 = async(start = CoroutineStart.LAZY) { apiCall1() }
-        val job2 = async(start = CoroutineStart.LAZY) { apiCall2() }
+    val job1 = async { apiCall1() }
+    val job2 = async { apiCall2() }
 
-        job1.start()
-        job2.start()
+    kotlin.runCatching {
         printWithThread(job1.await() + job2.await())
-
+    }.onFailure {
+        if (it is RuntimeException) {
+            println("예외발생 ${it.message}")
+        }
     }
-
-    printWithThread("소요 시간 $time ms")
 }
 
 suspend fun apiCall1(): Int {
     delay(1000)
-    return 1
+    throw RuntimeException()
+//    return 1
 }
 
 suspend fun apiCall2(): Int {
