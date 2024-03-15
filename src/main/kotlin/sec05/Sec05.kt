@@ -1,11 +1,6 @@
 package sec05
 
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import printWithThread
 
 fun example1(): Unit = runBlocking {
@@ -18,6 +13,8 @@ fun example1(): Unit = runBlocking {
         delay(1000)
         printWithThread("Job 2")
     }
+    job1.join()
+    job2.join()
 }
 
 fun example2(): Unit = runBlocking {
@@ -30,13 +27,30 @@ fun example2(): Unit = runBlocking {
     }
 }
 
-fun main(): Unit = runBlocking {
-    val exceptionHandler = CoroutineExceptionHandler { _, _ ->
-        printWithThread("예외")
-    }
-    val job = CoroutineScope(Dispatchers.Default).launch(exceptionHandler) {
+fun example3() = runBlocking {
+    val job = async(SupervisorJob()) {
         throw IllegalArgumentException()
     }
+    delay(1000)
+    try {
+        job.await()
+    } catch (e: IllegalArgumentException) {
+        printWithThread("예외 발생 ${e.message}")
+    }
+}
+
+fun main() = runBlocking {
+    val exceptionHandler = CoroutineExceptionHandler { context, throwable ->
+        if (throwable is IllegalArgumentException) {
+            printWithThread("예외발생 ${throwable.message}")
+        } else {
+            printWithThread("예외")
+        }
+    }
+    val job = CoroutineScope(Dispatchers.Default).async(exceptionHandler) {
+        throw IllegalArgumentException()
+    }
+    job.await()
 
     delay(1000)
 }
