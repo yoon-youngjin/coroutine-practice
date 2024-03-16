@@ -1,17 +1,21 @@
 package sec08
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import printWithThread
 
 fun main(): Unit = runBlocking {
-    launch {
-        a()
-        b()
-    }
+    repeat(10) {
+        launch {
+            a()
+            b()
+        }
 
-    launch {
-        c()
+        launch {
+            c()
+        }
     }
 }
 
