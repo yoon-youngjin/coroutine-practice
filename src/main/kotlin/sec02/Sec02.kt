@@ -21,4 +21,3 @@ suspend fun newRoutine() {
     yield()
     printWithThread("${num1 + num2}")
 }
-

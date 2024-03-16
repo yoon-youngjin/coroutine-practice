@@ -1,12 +1,7 @@
 package sec07
 
+import kotlinx.coroutines.*
 import java.util.concurrent.Executors
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import printWithThread
 
 fun example() {
@@ -25,11 +20,23 @@ suspend fun example3() {
     job.join()
 }
 
-fun main() {
-    val threadPool = Executors.newSingleThreadExecutor()
-    CoroutineScope(threadPool.asCoroutineDispatcher()).launch {
-
+suspend fun example4() {
+    val job = CoroutineScope(Dispatchers.Default).launch {
+        printWithThread("Job 1")
+        coroutineContext + CoroutineName("테스트") + Dispatchers.Main
+        coroutineContext.minusKey(CoroutineName.Key)
+        printWithThread(coroutineContext.isActive)
+        printWithThread(coroutineContext.job)
     }
+    job.join()
+}
+
+suspend fun main() {
+    example4()
+//    val threadPool = Executors.newSingleThreadExecutor()
+//    CoroutineScope(threadPool.asCoroutineDispatcher()).launch {
+//
+//    }
 }
 
 
