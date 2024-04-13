@@ -1,9 +1,6 @@
 package standardcoroutine
 
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 fun main() = runBlocking(context = CoroutineName("Parent")) {
     println("[${Thread.currentThread().name}] 실행")
@@ -17,4 +14,5 @@ fun test(coroutineScope: CoroutineScope) {
     coroutineScope.launch(context = CoroutineName("Child2")) {
         println("[${Thread.currentThread().name}] 실행")
     }
+    coroutineScope.launch(newFixedThreadPoolContext(20, "20-Dispatchers")) {  }
 }
