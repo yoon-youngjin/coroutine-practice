@@ -1,25 +1,25 @@
-package sec03
+package basiccoroutine.sec03
 
 import kotlinx.coroutines.*
-import printWithThread
+import basiccoroutine.printWithThread
 import kotlin.system.measureTimeMillis
 
 fun example1() {
     runBlocking {
-        printWithThread("START")
+        basiccoroutine.printWithThread("START")
         launch {
             delay(2_000L) // yield()와 비슷
-            printWithThread("LAUNCH END")
+            basiccoroutine.printWithThread("LAUNCH END")
         }
-        printWithThread("RUNBLOCKING END")
+        basiccoroutine.printWithThread("RUNBLOCKING END")
     }
 
-    printWithThread("END")
+    basiccoroutine.printWithThread("END")
 }
 
 fun example2(): Unit = runBlocking {
     val job = launch(start = CoroutineStart.LAZY) {
-        printWithThread("Hello launch")
+        basiccoroutine.printWithThread("Hello launch")
     }
 
     delay(1000)
@@ -29,7 +29,7 @@ fun example2(): Unit = runBlocking {
 fun example3(): Unit = runBlocking {
     val job = launch {
         (1..5).forEach {
-            printWithThread(it)
+            basiccoroutine.printWithThread(it)
             delay(500)
         }
     }
@@ -41,12 +41,12 @@ fun example3(): Unit = runBlocking {
 fun example4(): Unit = runBlocking {
     val job1 = launch {
         delay(1000)
-        printWithThread("Job 1")
+        basiccoroutine.printWithThread("Job 1")
     }
 
     val job2 = launch {
         delay(1000)
-        printWithThread("Job 2")
+        basiccoroutine.printWithThread("Job 2")
     }
 }
 
@@ -55,15 +55,15 @@ fun example5(): Unit = runBlocking {
         3 + 5
     }
     val result = job.await()
-    printWithThread(result)
+    basiccoroutine.printWithThread(result)
 }
 
 fun main(): Unit = runBlocking {
-    val job1 = async { apiCall1() }
-    val job2 = async { apiCall2() }
+    val job1 = async { basiccoroutine.sec03.apiCall1() }
+    val job2 = async { basiccoroutine.sec03.apiCall2() }
 
     kotlin.runCatching {
-        printWithThread(job1.await() + job2.await())
+        basiccoroutine.printWithThread(job1.await() + job2.await())
     }.onFailure {
         if (it is RuntimeException) {
             println("예외발생 ${it.message}")

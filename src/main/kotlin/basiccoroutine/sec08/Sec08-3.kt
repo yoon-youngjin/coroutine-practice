@@ -1,9 +1,9 @@
-package sec08
+package basiccoroutine.sec08
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
-import printWithThread
+import basiccoroutine.printWithThread
 
 fun main(): Unit = runBlocking {
     val result: Int? = withTimeoutOrNull(1000) {
@@ -11,6 +11,6 @@ fun main(): Unit = runBlocking {
         10 + 20
     }
 
-    printWithThread(result)
+    basiccoroutine.printWithThread(result)
 }
 

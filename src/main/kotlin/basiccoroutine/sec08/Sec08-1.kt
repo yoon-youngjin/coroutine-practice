@@ -1,33 +1,33 @@
-package sec08
+package basiccoroutine.sec08
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import printWithThread
+import basiccoroutine.printWithThread
 
 fun main(): Unit = runBlocking {
     repeat(10) {
         launch {
-            a()
-            b()
+            basiccoroutine.sec08.a()
+            basiccoroutine.sec08.b()
         }
 
         launch {
-            c()
+            basiccoroutine.sec08.c()
         }
     }
 }
 
 suspend fun a() {
-    printWithThread("A")
+    basiccoroutine.printWithThread("A")
 }
 
 suspend fun b() {
-    printWithThread("B")
+    basiccoroutine.printWithThread("B")
 }
 
 suspend fun c() {
-    printWithThread("C")
+    basiccoroutine.printWithThread("C")
 }
 

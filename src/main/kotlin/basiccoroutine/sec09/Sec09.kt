@@ -1,4 +1,4 @@
-package sec09
+package basiccoroutine.sec09
 
 import kotlinx.coroutines.delay
 
